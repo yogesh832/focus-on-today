@@ -12,25 +12,10 @@ const allQuotes = [
   'Whoa! You just completed all the goals, time for chill :D',
 ]
 
-// const allGoals = JSON.parse(localStorage.getItem('allGoals')) || {
-//   first: {
-//     name: '',
-//     completed: false,
-//   },
-//   second: {
-//     name: '',
-//     completed: false,
-//   },
-//   third: {
-//     name: '',
-//     completed: false,
-//   },
-// }
+const allGoals = JSON.parse(localStorage.getItem('allGoals')) || {};
 
-const allGoals = JSON.parse(localStorage.getItem('allGoals')) || {}
-
-let completedGoalsCount = Object.values(allGoals).filter(
-  (goal) => goal.completed).length
+let completedGoalsCount =
+ Object.values(allGoals).filter((goal) => goal.completed).length
 
 progressValue.style.width = `${(completedGoalsCount / inputFields.length) * 100}%`
 progressValue.firstElementChild.innerText = `${completedGoalsCount}/${inputFields.length} completed`
@@ -38,11 +23,7 @@ progressLabel.innerText = allQuotes[completedGoalsCount]
 
 checkBoxList.forEach((checkbox) => {
   checkbox.addEventListener('click', (e) => {
-    const allGoalsAdded = [...inputFields].every(function (input) {
-      location.reload();
-      return input.value
-      
-    })
+    const allGoalsAdded = [...inputFields].every(input => input.value)
 
     if (allGoalsAdded) {
       checkbox.parentElement.classList.toggle('completed')
@@ -57,6 +38,11 @@ checkBoxList.forEach((checkbox) => {
       progressLabel.innerText = allQuotes[completedGoalsCount]
 
       localStorage.setItem('allGoals', JSON.stringify(allGoals))
+
+      // Reload the page if all goals are completed
+      if (completedGoalsCount === inputFields.length) {
+        location.reload()
+      }
     } else {
       progressBar.classList.add('show-error')
     }
@@ -95,14 +81,17 @@ inputFields.forEach((input) => {
   })
 })
 
-const resetGoals= document.querySelector('.reset')
+const resetGoals = document.querySelector('.reset')
 
-
-if(completedGoalsCount === inputFields.length){
+if (completedGoalsCount === inputFields.length) {
   resetGoals.style.display = 'block';
-  
+
   resetGoals.addEventListener('click', () => {
     localStorage.clear();
     location.reload();
   });
+}
+
+else{
+  resetGoals.style.display = 'none';
 }
